@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercise Tracker</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body>
+
+    <header>
+      <h1>Exercise Tracker</h1>
+    </header>
+
+    <div class="container">
+
+      <section class="user-section">
+        <form action="/api/users" method="post">
+          <h2>Create a New User</h2>
+          <p>
+            Enter a username to create a new user profile in the tracker. The username will be associated with all future exercise logs.<br /><code>POST /api/users</code>
+          </p>
+          <input id="uname" type="text" name="username" placeholder="Enter your username" required />
+          <input type="submit" value="Create User" />
+        </form>
+      </section>
+
+      <section class="exercise-section">
+        <form action="/api/users/:_id/exercises" id="exercise-form" method="post">
+          <h2>Add Exercises</h2>
+          <p>
+            Fill in the details below to add exercises for an existing user.<br /><code>POST /api/users/:_id/exercises</code>
+          </p>
+          <input id="uid" type="text" name=":_id" placeholder="User ID*" required />
+          <input id="desc" type="text" name="description" placeholder="Exercise description*" required />
+          <input id="dur" type="text" name="duration" placeholder="Duration* (in minutes)" required />
+          <input id="date" type="text" name="date" placeholder="Date (YYYY-MM-DD, optional)" />
+          <input type="submit" value="Add Exercise" />
+        </form>
+      </section>
+
+      <section class="get-section">
+        <h2>Retrieve User's Exercise Log</h2>
+        <p>
+          You can retrieve a user's full exercise log using their user ID. Optionally, you can specify date ranges or limit the number of results.<br />
+          <code>GET /api/users/:_id/logs?[from][&amp;to][&amp;limit]</code>
+        </p>
+        <ul>
+          <li><strong>from</strong>: Start date for the log (format: YYYY-MM-DD)</li>
+          <li><strong>to</strong>: End date for the log (format: YYYY-MM-DD)</li>
+          <li><strong>limit</strong>: Maximum number of results to display</li>
+        </ul>
+        <p><strong>Example Usage:</strong></p>
+        <code>GET /api/users/1234/logs?from=2022-01-01&to=2022-12-31&limit=10</code>
+      </section>
+    </div>
+
+    <footer> 
+      <p>Created as a demonstration of a simple Exercise Tracker.</p> 
+      <p><strong>Note:</strong> This service is for educational use and serves as a sample of my projects.</p> 
+    </footer>
+      
+    <script>
+      const exerciseForm = document.getElementById("exercise-form");
+
+      exerciseForm.addEventListener("submit", (event) => {
+        const userId = document.getElementById("uid").value;
+        if (!userId) {
+          event.preventDefault();
+          alert("Please enter a valid User ID");
+        } else {
+          exerciseForm.action = `/api/users/${userId}/exercises`;
+        }
+      });
+    </script>
+  </body>
+</html>
